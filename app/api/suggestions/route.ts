@@ -31,9 +31,16 @@ export async function POST(req: Request) {
     return NextResponse.json({ suggestions });
   } catch (error) {
     console.error('Error generating suggestions:', error);
-    return NextResponse.json(
-      { error: 'Failed to generate suggestions' },
-      { status: 500 }
-    );
+    
+    // Fallback suggestions when API quota is exceeded
+    const fallbackSuggestions = [
+      "What's a quick weeknight dinner recipe?",
+      "How do I cook perfect pasta?",
+      "What spices go well with chicken?",
+      "How can I meal prep for the week?",
+      "What's a healthy breakfast option?"
+    ];
+    
+    return NextResponse.json({ suggestions: fallbackSuggestions });
   }
 }

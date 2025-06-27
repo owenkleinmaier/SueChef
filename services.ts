@@ -53,7 +53,7 @@ export function getChats() {
 
 export async function updateTitle(messages: UIMessage[], id: string) {
   const titleRes = await fetch(
-    `${process.env.NEXT_PUBLIC_URL}/api/chat/title`,
+    `/api/chat/title`,
     {
       method: "POST",
       body: JSON.stringify({

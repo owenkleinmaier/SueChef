@@ -6,7 +6,6 @@ export const maxDuration = 30;
 
 export async function POST(req: Request) {
   try {
-    // Check if API key is set
     if (!process.env.OPENAI_API_KEY) {
       return new Response(JSON.stringify({ error: 'OpenAI API key not configured' }), {
         status: 500,
