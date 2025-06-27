@@ -1,10 +1,11 @@
 import Chat from "@/components/Chat";
-import Image from "next/image";
+import { Sidebar } from "@/components/Sidebar";
 
 export default function Home() {
   return (
-    <div className="py-24 px-12 flex flex-1 justify-center items-center w-screen h-screen">
-      <Chat/>
+    <div className="h-screen bg-[#FBF4E4] flex flex-row">
+      <Chat />
+      <Sidebar />
     </div>
   );
 }
