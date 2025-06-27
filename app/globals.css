@@ -1,35 +1,20 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-:root {
-  --background: #FBF4E4;
-  --foreground: #193554;
-  --input-container: #FFFBEF;
-  --card-bg: #FFFCF4;
-  --selected: #FA9E20;
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-input-container: var(--input-container);
-  --color-card-bg: var(--card-bg);
-  --color-selected: var(--selected);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #FBF4E4;
-    --foreground: #193554;
-    --input-container: #FFFBEF;
-    --card-bg: #FFFCF4;
-    --selected: #FA9E20;
-  }
-}
-
+html,
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
 }

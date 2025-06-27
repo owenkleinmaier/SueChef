@@ -2,9 +2,25 @@
 
 import { useChat } from "@ai-sdk/react";
 import { Send, Mic, Clipboard } from "react-feather";
+import { useUser } from "@/contexts/UserContext";
+import { forwardRef, useImperativeHandle } from "react";
 
-export default function Chat() {
-  const { messages, input, handleInputChange, handleSubmit } = useChat();
+export interface ChatRef {
+  setInput: (value: string) => void;
+}
+
+const Chat = forwardRef<ChatRef>((props, ref) => {
+  const { getAIContext } = useUser();
+  
+  const { messages, input, handleInputChange, handleSubmit, setInput } = useChat({
+    body: {
+      context: getAIContext()
+    }
+  });
+
+  useImperativeHandle(ref, () => ({
+    setInput
+  }));
 
   return (
     <div className="flex-1 flex flex-col items-center px-8 border-r-4 border-[#193554]">
@@ -72,21 +88,7 @@ export default function Chat() {
                   : "border-[#193554] bg-[#FFFCF4] text-[#193554]"
               }`}
             >
-              {message.parts.map((part, i) => {
-                switch (part.type) {
-                  case "text":
-                    return (
-                      <div
-                        key={`${message.id}-${i}`}
-                        className="whitespace-pre-wrap"
-                      >
-                        {part.text}
-                      </div>
-                    );
-                  default:
-                    return null;
-                }
-              })}
+              {message.content}
               {message.role === "assistant" && (
                 <Clipboard
                   size={20}
@@ -122,4 +124,8 @@ export default function Chat() {
       </form>
     </div>
   );
-}
+});
+
+Chat.displayName = 'Chat';
+
+export default Chat;
