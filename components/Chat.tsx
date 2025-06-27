@@ -7,38 +7,53 @@ import {
   updateTitle,
 } from "@/services";
 import { useChat } from "@ai-sdk/react";
-import { useEffect } from "react";
+import { useEffect, forwardRef, useImperativeHandle } from "react";
 import { Clipboard, Mic, Send } from "react-feather";
 import { useChatId } from "./ChatProvider";
+import { useUser } from "@/contexts/UserContext";
 
-export default function Chat({ id }: { id: string | null }) {
+export interface ChatRef {
+  setInput: (value: string) => void;
+}
+
+const Chat = forwardRef<ChatRef, { id?: string | null }>((props, ref) => {
+  const { getAIContext } = useUser();
   const { setChatId, chatId } = useChatId();
-
-  const { messages, input, handleInputChange, handleSubmit, setMessages } =
-    useChat();
+  
+  const { messages, input, handleInputChange, handleSubmit, setInput, setMessages } = useChat({
+    body: {
+      context: getAIContext()
+    }
+  });
 
   useEffect(() => {
+    const id = props.id || chatId;
     if (!id) {
-      const id = createChat();
-      setChatId(id);
+      const newId = createChat();
+      setChatId(newId);
     } else {
-      const chat = getChat(id)
-      console.log(chat?.title)
+      const chat = getChat(id);
+      console.log(chat?.title);
       const chatMessages = getChat(id)?.messages;
       if (chatMessages) {
         setMessages(chatMessages);
       }
     }
-  }, [chatId]);
+  }, [chatId, props.id]);
 
   useEffect(() => {
+    const id = props.id || chatId;
     if (id) {
       updateChatMessages(messages, id);
       if (getChat(id)?.title == "New Chat") {
         updateTitle(messages, id);
       }
     }
-  }, [messages]);
+  }, [messages, chatId, props.id]);
+
+  useImperativeHandle(ref, () => ({
+    setInput
+  }));
 
   return (
     <div className="flex-1 flex flex-col items-center px-8 border-r-4 border-[#193554]">
@@ -79,21 +94,7 @@ export default function Chat({ id }: { id: string | null }) {
                   : "border-[#193554] bg-[#FFFCF4] text-[#193554]"
               }`}
             >
-              {message.parts.map((part, i) => {
-                switch (part.type) {
-                  case "text":
-                    return (
-                      <div
-                        key={`${message.id}-${i}`}
-                        className="whitespace-pre-wrap"
-                      >
-                        {part.text}
-                      </div>
-                    );
-                  default:
-                    return null;
-                }
-              })}
+              {message.content}
               {message.role === "assistant" && (
                 <Clipboard
                   size={20}
@@ -129,4 +130,8 @@ export default function Chat({ id }: { id: string | null }) {
       </form>
     </div>
   );
-}
+});
+
+Chat.displayName = 'Chat';
+
+export default Chat;
