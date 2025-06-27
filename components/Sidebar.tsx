@@ -11,7 +11,7 @@ import {
 
 export function QuickActions() {
   return (
-    <div className="flex flex-col gap-6 flex-1">
+    <div className="max-h-[80vh] overflow-y-auto flex flex-col gap-6 flex-1">
       <div className="bg-[#FFFCF4] border-2 border-[#193554]/10 rounded-lg shadow p-6 text-lg font-medium text-[#193554] min-h-[90px] flex items-center justify-center hover:bg-[#FFFCF4]/80 transition-colors cursor-pointer">
         Indiana Local dishes
       </div>
@@ -29,13 +29,15 @@ export function ChatHistory() {
   ];
 
   return (
-    <div className="flex flex-col gap-4 flex-1">
+    <div className="max-h-[80vh] overflow-y-auto flex flex-col gap-4 flex-1">
       {mockChats.map((chat) => (
         <div
           key={chat.id}
           className="bg-[#FFFCF4] border-2 border-[#193554]/10 rounded-lg shadow p-5 min-h-[80px] flex flex-col justify-center cursor-pointer hover:bg-[#FFFCF4]/80 transition-colors"
         >
-          <div className="font-medium text-[#193554] text-base">{chat.title}</div>
+          <div className="font-medium text-[#193554] text-base">
+            {chat.title}
+          </div>
           <div className="text-sm text-[#193554]/60 mt-1">{chat.time}</div>
         </div>
       ))}
@@ -67,13 +69,15 @@ export function RecipeBook() {
   ];
 
   return (
-    <div className="flex flex-col gap-4 flex-1">
+    <div className="overflow-y-auto max-h-[80vh] flex flex-col gap-4 flex-1">
       {recipes.map((recipe) => (
         <div
           key={recipe.id}
           className="bg-[#FFFCF4] border-2 border-[#193554]/10 rounded-lg shadow p-5 min-h-[80px] flex flex-col justify-center cursor-pointer hover:bg-[#FFFCF4]/80 transition-colors"
         >
-          <h4 className="font-medium text-[#193554] text-base mb-2">{recipe.title}</h4>
+          <h4 className="font-medium text-[#193554] text-base mb-2">
+            {recipe.title}
+          </h4>
           <div className="flex justify-between items-center">
             <span className="text-sm text-[#193554]/60">{recipe.time}</span>
             <span className="text-xs bg-[#FA9E20] text-[#193554] px-3 py-1 rounded-full font-medium">
@@ -92,20 +96,39 @@ export function HometownHarvest() {
     { name: "Apples", season: "Fall", farm: "Orchard Hills" },
     { name: "Pumpkins", season: "Fall", farm: "Miller's Patch" },
     { name: "Tomatoes", season: "Summer", farm: "Green Valley" },
+    // Add more items as needed for scroll testing
+    { name: "Blueberries", season: "Summer", farm: "Berry Best" },
+    { name: "Asparagus", season: "Spring", farm: "Spring Valley" },
+    { name: "Peaches", season: "Summer", farm: "Peach Grove" },
+    { name: "Potatoes", season: "Fall", farm: "Rooted Acres" },
+    { name: "Cucumbers", season: "Summer", farm: "Green Thumb" },
+    { name: "Carrots", season: "Fall", farm: "Orange Patch" },
   ];
+  const [location, setLocation] = useState("");
 
   return (
     <div className="flex flex-col gap-4 flex-1">
-      {localIngredients.map((item, index) => (
-        <div
-          key={index}
-          className="bg-[#FFFCF4] border-2 border-[#193554]/10 rounded-lg shadow p-5 min-h-[80px] flex flex-col justify-center cursor-pointer hover:bg-[#FFFCF4]/80 transition-colors"
-        >
-          <h4 className="font-medium text-[#193554] text-base mb-2">{item.name}</h4>
-          <div className="text-sm text-[#193554]/80">{item.season}</div>
-          <div className="text-sm text-[#193554]/60">{item.farm}</div>
-        </div>
-      ))}
+      <input
+        className="bg-[#FFFBEF] border-2 border-[#193554]/20 rounded-lg px-6 py-5 text-lg font-medium shadow focus:outline-none focus:border-[#FA9E20] focus:ring-2 focus:ring-[#FA9E20]/20 text-[#193554] placeholder-[#193554]/60"
+        style={{ fontFamily: "Helvetica Neue, Arial, sans-serif" }}
+        placeholder="Enter a location for local dishes"
+        onChange={(e) => setLocation(e.target.value)}
+        value={location}
+      />
+      <div className="flex-1 overflow-y-auto max-h-[60vh] flex flex-col gap-4 pr-2">
+        {localIngredients.map((item, index) => (
+          <div
+            key={index}
+            className="bg-[#FFFCF4] border-2 border-[#193554]/10 rounded-lg shadow p-5 min-h-[80px] flex flex-col justify-center cursor-pointer hover:bg-[#FFFCF4]/80 transition-colors"
+          >
+            <h4 className="font-medium text-[#193554] text-base mb-2">
+              {item.name}
+            </h4>
+            <div className="text-sm text-[#193554]/80">{item.season}</div>
+            <div className="text-sm text-[#193554]/60">{item.farm}</div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
@@ -115,7 +138,7 @@ export function Settings() {
   const [skillLevel, setSkillLevel] = useState("beginner");
 
   return (
-    <div className="flex flex-col gap-6 flex-1">
+    <div className="max-h-[80vh] overflow-y-auto flex flex-col gap-6 flex-1">
       <div className="bg-[#FFFCF4] border-2 border-[#193554]/10 rounded-lg shadow p-6">
         <label className="block text-lg font-medium text-[#193554] mb-3">
           Skill Level
@@ -149,7 +172,10 @@ export function Settings() {
             <span className="text-base text-[#193554] font-medium">
               Voice responses
             </span>
-            <input type="checkbox" className="w-5 h-5 accent-[#FA9E20] rounded" />
+            <input
+              type="checkbox"
+              className="w-5 h-5 accent-[#FA9E20] rounded"
+            />
           </div>
           <div className="flex items-center justify-between">
             <span className="text-base text-[#193554] font-medium">
@@ -210,7 +236,7 @@ export function Sidebar() {
   };
 
   const getCurrentTitle = () => {
-    const currentTab = tabs.find(tab => tab.id === activeTab);
+    const currentTab = tabs.find((tab) => tab.id === activeTab);
     return currentTab ? currentTab.title : "Quick Actions";
   };
 
@@ -219,9 +245,9 @@ export function Sidebar() {
       <div className="text-3xl font-bold text-[#193554] mt-4 mb-6">
         {getCurrentTitle()}
       </div>
-      
+
       {renderContent()}
-      
+
       {/* Sidebar icons */}
       <div className="flex flex-row justify-between items-center bg-[#FFFCF4] border-2 border-[#193554]/10 rounded-lg shadow px-6 py-4 mt-8 mb-4">
         {tabs.map((tab) => {
@@ -231,8 +257,8 @@ export function Sidebar() {
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`cursor-pointer transition-all duration-200 p-2 rounded-lg ${
-                activeTab === tab.id 
-                  ? "text-[#FA9E20] bg-[#FA9E20]/10 scale-110" 
+                activeTab === tab.id
+                  ? "text-[#FA9E20] bg-[#FA9E20]/10 scale-110"
                   : "text-[#193554] hover:text-[#FA9E20] hover:bg-[#FA9E20]/5"
               }`}
             >
