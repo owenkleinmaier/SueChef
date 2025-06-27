@@ -1,9 +1,21 @@
 "use client";
 
+import { getChat, updateChatMessages } from "@/localstorage";
 import { useChat } from "@ai-sdk/react";
+import { useEffect } from "react";
 
-export default function Chat() {
-  const { messages, input, handleInputChange, handleSubmit } = useChat();
+export default function Chat({ id }: { id: string }) {
+  const { messages, input, handleInputChange, handleSubmit, setMessages } =
+    useChat();
+
+  useEffect(() => {
+    const initMessages = getChat(id)?.messages;
+    if (initMessages) {
+      setMessages(initMessages);
+    }
+    updateChatMessages(messages, id);
+  }, [messages]);
+
   return (
     <div className="flex flex-col w-full max-w-md py-24 mx-auto stretch">
       {messages.map((message) => (
