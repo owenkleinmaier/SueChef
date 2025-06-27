@@ -1,13 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { getChats } from "@/services";
+import { Chat } from "@/types/chats";
+import { useEffect, useState } from "react";
+import { formatDistanceToNow } from "date-fns";
+
 import {
+  BarChart2,
   Clipboard,
   Clock,
-  BarChart2,
   MapPin,
   Settings as SettingsIcon,
 } from "react-feather";
+import { useChatId } from "./ChatProvider";
 
 export function QuickActions() {
   return (
@@ -21,23 +26,31 @@ export function QuickActions() {
 }
 
 export function ChatHistory() {
-  const mockChats = [
-    { id: "1", title: "Pasta with tomatoes", time: "2 hours ago" },
-    { id: "2", title: "Quick breakfast ideas", time: "Yesterday" },
-    { id: "3", title: "Chicken recipes", time: "3 days ago" },
-    { id: "4", title: "Vegetarian dinner", time: "1 week ago" },
-  ];
+  const [chats, setChats] = useState<Chat[] | null>(null);
+  const { setChatId } = useChatId();
+
+  useEffect(() => {
+    const chats = getChats();
+    setChats(chats);
+  }, []);
 
   return (
-    <div className="flex flex-col gap-4 flex-1">
-      {mockChats.map((chat) => (
-        <div
+    <div className="flex flex-col gap-4 flex-1 overflow-scroll">
+      {chats?.map((chat) => (
+        <button
+          onClick={() => {
+            setChatId(chat.id)
+          }}
           key={chat.id}
           className="bg-[#FFFCF4] border-2 border-[#193554]/10 rounded-lg shadow p-5 min-h-[80px] flex flex-col justify-center cursor-pointer hover:bg-[#FFFCF4]/80 transition-colors"
         >
-          <div className="font-medium text-[#193554] text-base">{chat.title}</div>
-          <div className="text-sm text-[#193554]/60 mt-1">{chat.time}</div>
-        </div>
+          <div className="font-medium text-[#193554] text-base">
+            {chat.title}
+          </div>
+          <div className="text-sm text-[#193554]/60 mt-1">
+            {formatDistanceToNow(chat.created_at, { addSuffix: true })}
+          </div>
+        </button>
       ))}
     </div>
   );
@@ -73,7 +86,9 @@ export function RecipeBook() {
           key={recipe.id}
           className="bg-[#FFFCF4] border-2 border-[#193554]/10 rounded-lg shadow p-5 min-h-[80px] flex flex-col justify-center cursor-pointer hover:bg-[#FFFCF4]/80 transition-colors"
         >
-          <h4 className="font-medium text-[#193554] text-base mb-2">{recipe.title}</h4>
+          <h4 className="font-medium text-[#193554] text-base mb-2">
+            {recipe.title}
+          </h4>
           <div className="flex justify-between items-center">
             <span className="text-sm text-[#193554]/60">{recipe.time}</span>
             <span className="text-xs bg-[#FA9E20] text-[#193554] px-3 py-1 rounded-full font-medium">
@@ -101,7 +116,9 @@ export function HometownHarvest() {
           key={index}
           className="bg-[#FFFCF4] border-2 border-[#193554]/10 rounded-lg shadow p-5 min-h-[80px] flex flex-col justify-center cursor-pointer hover:bg-[#FFFCF4]/80 transition-colors"
         >
-          <h4 className="font-medium text-[#193554] text-base mb-2">{item.name}</h4>
+          <h4 className="font-medium text-[#193554] text-base mb-2">
+            {item.name}
+          </h4>
           <div className="text-sm text-[#193554]/80">{item.season}</div>
           <div className="text-sm text-[#193554]/60">{item.farm}</div>
         </div>
@@ -149,7 +166,10 @@ export function Settings() {
             <span className="text-base text-[#193554] font-medium">
               Voice responses
             </span>
-            <input type="checkbox" className="w-5 h-5 accent-[#FA9E20] rounded" />
+            <input
+              type="checkbox"
+              className="w-5 h-5 accent-[#FA9E20] rounded"
+            />
           </div>
           <div className="flex items-center justify-between">
             <span className="text-base text-[#193554] font-medium">
@@ -210,7 +230,7 @@ export function Sidebar() {
   };
 
   const getCurrentTitle = () => {
-    const currentTab = tabs.find(tab => tab.id === activeTab);
+    const currentTab = tabs.find((tab) => tab.id === activeTab);
     return currentTab ? currentTab.title : "Quick Actions";
   };
 
@@ -219,9 +239,9 @@ export function Sidebar() {
       <div className="text-3xl font-bold text-[#193554] mt-4 mb-6">
         {getCurrentTitle()}
       </div>
-      
+
       {renderContent()}
-      
+
       {/* Sidebar icons */}
       <div className="flex flex-row justify-between items-center bg-[#FFFCF4] border-2 border-[#193554]/10 rounded-lg shadow px-6 py-4 mt-8 mb-4">
         {tabs.map((tab) => {
@@ -231,8 +251,8 @@ export function Sidebar() {
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`cursor-pointer transition-all duration-200 p-2 rounded-lg ${
-                activeTab === tab.id 
-                  ? "text-[#FA9E20] bg-[#FA9E20]/10 scale-110" 
+                activeTab === tab.id
+                  ? "text-[#FA9E20] bg-[#FA9E20]/10 scale-110"
                   : "text-[#193554] hover:text-[#FA9E20] hover:bg-[#FA9E20]/5"
               }`}
             >
