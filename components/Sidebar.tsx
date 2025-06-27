@@ -1,13 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { getChats } from "@/services";
+import { Chat } from "@/types/chats";
+import { useEffect, useState } from "react";
+import { formatDistanceToNow } from "date-fns";
+
 import {
+  BarChart2,
   Clipboard,
   Clock,
-  BarChart2,
   MapPin,
   Settings as SettingsIcon,
 } from "react-feather";
+import { useChatId } from "./ChatProvider";
 
 export function QuickActions() {
   return (
@@ -21,25 +26,31 @@ export function QuickActions() {
 }
 
 export function ChatHistory() {
-  const mockChats = [
-    { id: "1", title: "Pasta with tomatoes", time: "2 hours ago" },
-    { id: "2", title: "Quick breakfast ideas", time: "Yesterday" },
-    { id: "3", title: "Chicken recipes", time: "3 days ago" },
-    { id: "4", title: "Vegetarian dinner", time: "1 week ago" },
-  ];
+  const [chats, setChats] = useState<Chat[] | null>(null);
+  const { setChatId } = useChatId();
+
+  useEffect(() => {
+    const chats = getChats();
+    setChats(chats);
+  }, []);
 
   return (
-    <div className="max-h-[80vh] overflow-y-auto flex flex-col gap-4 flex-1">
-      {mockChats.map((chat) => (
-        <div
+    <div className="flex flex-col gap-4 flex-1 overflow-scroll">
+      {chats?.map((chat) => (
+        <button
+          onClick={() => {
+            setChatId(chat.id)
+          }}
           key={chat.id}
           className="bg-[#FFFCF4] border-2 border-[#193554]/10 rounded-lg shadow p-5 min-h-[80px] flex flex-col justify-center cursor-pointer hover:bg-[#FFFCF4]/80 transition-colors"
         >
           <div className="font-medium text-[#193554] text-base">
             {chat.title}
           </div>
-          <div className="text-sm text-[#193554]/60 mt-1">{chat.time}</div>
-        </div>
+          <div className="text-sm text-[#193554]/60 mt-1">
+            {formatDistanceToNow(chat.created_at, { addSuffix: true })}
+          </div>
+        </button>
       ))}
     </div>
   );
