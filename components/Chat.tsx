@@ -99,7 +99,7 @@ export default function Chat() {
       </div>
 
       {/* Input */}
-      <form onSubmit={handleSubmit} className="w-full flex items-center">
+      <form onSubmit={handleSubmit} className="w-full flex items-center pb-6">
         <input
           className="flex-1 bg-[#FFFBEF] border-2 border-[#193554]/20 rounded-lg px-6 py-5 text-lg font-medium shadow focus:outline-none focus:border-[#FA9E20] focus:ring-2 focus:ring-[#FA9E20]/20 text-[#193554] placeholder-[#193554]/60"
           style={{ fontFamily: "Helvetica Neue, Arial, sans-serif" }}
