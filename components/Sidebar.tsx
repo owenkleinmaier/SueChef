@@ -16,7 +16,7 @@ import { useChatId } from "./ChatProvider";
 
 export function QuickActions() {
   return (
-    <div className="flex flex-col gap-6 flex-1">
+    <div className="max-h-[80vh] overflow-y-auto flex flex-col gap-6 flex-1">
       <div className="bg-[#FFFCF4] border-2 border-[#193554]/10 rounded-lg shadow p-6 text-lg font-medium text-[#193554] min-h-[90px] flex items-center justify-center hover:bg-[#FFFCF4]/80 transition-colors cursor-pointer">
         Indiana Local dishes
       </div>
@@ -80,7 +80,7 @@ export function RecipeBook() {
   ];
 
   return (
-    <div className="flex flex-col gap-4 flex-1">
+    <div className="overflow-y-auto max-h-[80vh] flex flex-col gap-4 flex-1">
       {recipes.map((recipe) => (
         <div
           key={recipe.id}
@@ -107,22 +107,39 @@ export function HometownHarvest() {
     { name: "Apples", season: "Fall", farm: "Orchard Hills" },
     { name: "Pumpkins", season: "Fall", farm: "Miller's Patch" },
     { name: "Tomatoes", season: "Summer", farm: "Green Valley" },
+    // Add more items as needed for scroll testing
+    { name: "Blueberries", season: "Summer", farm: "Berry Best" },
+    { name: "Asparagus", season: "Spring", farm: "Spring Valley" },
+    { name: "Peaches", season: "Summer", farm: "Peach Grove" },
+    { name: "Potatoes", season: "Fall", farm: "Rooted Acres" },
+    { name: "Cucumbers", season: "Summer", farm: "Green Thumb" },
+    { name: "Carrots", season: "Fall", farm: "Orange Patch" },
   ];
+  const [location, setLocation] = useState("");
 
   return (
     <div className="flex flex-col gap-4 flex-1">
-      {localIngredients.map((item, index) => (
-        <div
-          key={index}
-          className="bg-[#FFFCF4] border-2 border-[#193554]/10 rounded-lg shadow p-5 min-h-[80px] flex flex-col justify-center cursor-pointer hover:bg-[#FFFCF4]/80 transition-colors"
-        >
-          <h4 className="font-medium text-[#193554] text-base mb-2">
-            {item.name}
-          </h4>
-          <div className="text-sm text-[#193554]/80">{item.season}</div>
-          <div className="text-sm text-[#193554]/60">{item.farm}</div>
-        </div>
-      ))}
+      <input
+        className="bg-[#FFFBEF] border-2 border-[#193554]/20 rounded-lg px-6 py-5 text-lg font-medium shadow focus:outline-none focus:border-[#FA9E20] focus:ring-2 focus:ring-[#FA9E20]/20 text-[#193554] placeholder-[#193554]/60"
+        style={{ fontFamily: "Helvetica Neue, Arial, sans-serif" }}
+        placeholder="Enter a location for local dishes"
+        onChange={(e) => setLocation(e.target.value)}
+        value={location}
+      />
+      <div className="flex-1 overflow-y-auto max-h-[60vh] flex flex-col gap-4 pr-2">
+        {localIngredients.map((item, index) => (
+          <div
+            key={index}
+            className="bg-[#FFFCF4] border-2 border-[#193554]/10 rounded-lg shadow p-5 min-h-[80px] flex flex-col justify-center cursor-pointer hover:bg-[#FFFCF4]/80 transition-colors"
+          >
+            <h4 className="font-medium text-[#193554] text-base mb-2">
+              {item.name}
+            </h4>
+            <div className="text-sm text-[#193554]/80">{item.season}</div>
+            <div className="text-sm text-[#193554]/60">{item.farm}</div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
@@ -132,7 +149,7 @@ export function Settings() {
   const [skillLevel, setSkillLevel] = useState("beginner");
 
   return (
-    <div className="flex flex-col gap-6 flex-1">
+    <div className="max-h-[80vh] overflow-y-auto flex flex-col gap-6 flex-1">
       <div className="bg-[#FFFCF4] border-2 border-[#193554]/10 rounded-lg shadow p-6">
         <label className="block text-lg font-medium text-[#193554] mb-3">
           Skill Level
